@@ -30,3 +30,12 @@ Route::get('/add/{number1?}/{number2?}', function ($number1, $number2)
 {
 	return $number1 + $number2;
 });
+Route::get('/rolldice/{guess}', function ($guess)
+{
+	$data = ['number' => rand(1, 6),
+			'guess' => $guess
+	];
+	return view('roll-dice', $data);
+	// can also return data like this
+	// return view('roll-dice')->with($data);
+});
