@@ -17,7 +17,7 @@ class HomeController extends Controller
         $data = ['word' => $word];
 		return view('uppercase', $data);
     }
-    public function rollDice ($guess = 4)
+    public function rollDice ($guess = 1)
     {
     	$data = ['number' => rand(1, 6),
 			'guess' => $guess
