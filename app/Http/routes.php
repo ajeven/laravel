@@ -20,11 +20,13 @@ Route::get('/sayhello/{name?}', function ($name = 'Class')
 });
 Route::get('/uppercase/{word?}', function ($word = 'zomg')
 {
-	return strtoupper($word);
+	$data = ['word' => $word];
+	return view('uppercase', $data);
 });
 Route::get('/math/{number?}', function ($number = '1')
 {
-	return ++$number;
+	$data = ['number' => $number];
+	return view('math', $data);
 });
 Route::get('/add/{number1?}/{number2?}', function ($number1, $number2)
 {
