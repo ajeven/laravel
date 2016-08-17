@@ -29,3 +29,4 @@ Route::get('/add/{number1}/{number2}', function ($number1, $number2)
 
 Route::get('/rolldice/{guess?}', 'HomeController@rollDice');
 
+Route::resource('/posts', 'PostsController');
