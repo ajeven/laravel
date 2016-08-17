@@ -1,5 +1,4 @@
 <?php
-
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -14,10 +13,12 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
 Route::get('/sayhello/{name?}', function ($name = 'Class') 
 {
 	return 'Hello ' . $name . '!';
 });
+
 Route::get('/uppercase/{word?}', 'HomeController@capsWord');
 
 Route::get('/math/{number?}', 'HomeController@math');
