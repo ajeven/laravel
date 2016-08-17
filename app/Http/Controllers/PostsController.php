@@ -26,7 +26,7 @@ class PostsController extends Controller
      */
     public function create()
     {
-        //
+        return 'This will be a form to create posts';
     }
 
     /**
@@ -37,7 +37,7 @@ class PostsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        return 'We are storing this post';
     }
 
     /**
@@ -48,7 +48,7 @@ class PostsController extends Controller
      */
     public function show($id)
     {
-        //
+        return 'We are showing you a post tied to an id';
     }
 
     /**
@@ -59,7 +59,7 @@ class PostsController extends Controller
      */
     public function edit($id)
     {
-        //
+        return 'You can edit post on this page';
     }
 
     /**
@@ -71,7 +71,7 @@ class PostsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        return 'Update a specific post';
     }
 
     /**
@@ -82,6 +82,6 @@ class PostsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        return 'Throwing post in the trash';
     }
 }
