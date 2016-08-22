@@ -9,6 +9,7 @@
 				<th>Content</th>
 				<th>Created</th>
 				<th>Updated</th>
+				<th>Owner</th>
 			</tr>
 		</thead>
 			<tbody>
@@ -19,12 +20,13 @@
 						<td>{{ $post->content }}</td>
 						<td>{{ $post->created_at->setTimezone('America/Chicago')->format('l, F jS Y @ h:i:s A') }}</td>
 						<td>{{ $post->updated_at->setTimezone('America/Chicago')->format('l, F jS Y @ h:i:s A') }}</td>
+						<td>{{ $post->user->name }}</td>
 					</tr>
 					@endforeach
 			</tbody>
 		<tfoot>
 			<tr>
-				<td colspan="5" class="text-center">{!! $posts->render() !!}</td>
+				<td colspan="6" class="text-center">{!! $posts->render() !!}</td>
 			</tr>
 		</tfoot>	
 	</table>

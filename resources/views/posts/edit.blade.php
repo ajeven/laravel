@@ -43,4 +43,16 @@
 		@endif
 			<button type="submit" class="btn btn-info">Update</button>
 	</form>
+	<span>OR</span>
+	<form class="form-inline" method="POST" action="{{ action('PostsController@destroy', $post->id) }}">
+		<input type="hidden" name="_method" value="DELETE">
+		{!! csrf_field() !!}
+		<button type="submit" class="btn btn-danger"><a href="{{ action('PostsController@destroy', $post->id) }}"></a>Delete</button>
+	</form>
+	<span>OR</span>
+	<form class="form-inline restore" method="POST" action="{{ action('PostsController@restore', $post->id) }}">
+		<input type="hidden" name="_method" value="POST">
+		{!! csrf_field() !!}
+		<button type="submit" class="btn btn-success"><a href="{{ action('PostsController@restore', $post->id) }}"></a>Restore</button>
+	</form>
 @stop

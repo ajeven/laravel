@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use App\Post;
 
 class PostsController extends Controller
 {
@@ -16,7 +17,8 @@ class PostsController extends Controller
 	 */
 	public function index()
 	{
-		$posts = \App\Post::paginate(4);
+
+		$posts = Post::paginate(4);
 		return view('posts.index', ['posts' => $posts]);
 	}
 
@@ -39,15 +41,9 @@ class PostsController extends Controller
 	public function store(Request $request)
 	{
 		
-    	$this->validate($request, \App\Post::$rules);
-
-		$post = new  \App\Post();
-		$post->title = $request->input('title');
-		$post->url= $request->input('url');
-		$post->content  = $request->input('content');
+		$post = new  Post();
 		$post->user_id = 1;
-		$post->save();
-		return redirect()->action('PostsController@index');
+		return $this->validateAndSave($post, $request);
 	}
 
 	/**
@@ -58,8 +54,13 @@ class PostsController extends Controller
 	 */
 	public function show($id)
 	{
-		$post = \App\Post::find($id);
+		$post = Post::find($id);
 		// dd($data);
+		if (!$post)
+		{
+			abort(404);
+		}
+
 		return view('posts.show', ['post' => $post]);
 	}
 
@@ -71,7 +72,12 @@ class PostsController extends Controller
 	 */
 	public function edit($id)
 	{   
-		$post = \App\Post::find($id);
+		$post = Post::withTrashed()->where('id', $id)->first();
+		if (!$post)
+		{
+			abort(404);
+		}
+
 		return view('posts.edit', ['post' => $post]);
 	}
 
@@ -84,14 +90,8 @@ class PostsController extends Controller
 	 */
 	public function update(Request $request, $id)
 	{
-		$this->validate($request, \App\Post::$rules);
-
-		$post = \App\Post::find($id);
-		$post->title = $request->input('title');
-		$post->url= $request->input('url');
-		$post->content  = $request->input('content');
-		$post->save();
-		return redirect()->action('PostsController@index');
+		$post = Post::find($id);
+		return $this->validateAndSave($post, $request);
 	}
 
 	/**
@@ -100,9 +100,35 @@ class PostsController extends Controller
 	 * @param  int  $id
 	 * @return \Illuminate\Http\Response
 	 */
-	public function destroy($id)
+	public function destroy(Request $request, $id)
 	{
-		$post = \App\Post::find($id);
+		$post = Post::find($id);
 		$post->delete();
+		$request->session()->flash('message', 'Post has been deleted');
+		return redirect()->action('PostsController@index');
+	}
+	/**
+	 * Remove the specified resource from storage.
+	 *
+	 * @param  int  $id
+	 * @return \Illuminate\Http\Response
+	 */
+	public function restore(Request $request, $id) 
+	{
+		$post = Post::withTrashed()->where('id', $id)->first();
+		$post->restore();
+		$post->save();
+		$request->session()->flash('message', 'Posts have been restored');
+		return redirect()->action('PostsController@index');
+	}
+	private function validateAndSave(Post $post, Request $request)
+	{
+		$this->validate($request, Post::$rules);
+		$post->title = $request->input('title');
+		$post->url= $request->input('url');
+		$post->content  = $request->input('content');
+		$post->save();
+		$request->session()->flash('message', 'We have made liftoff');
+		return redirect()->action('PostsController@index');
 	}
 }
