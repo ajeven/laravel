@@ -18,7 +18,6 @@ class Post extends Model
 		'url'   => 'required',
 		'content' => 'required'
 		];
-
 	protected function formatValidationErrors(Validator $validator)
 	{
 		return $validator->errors()->all();
@@ -39,6 +38,10 @@ class Post extends Model
 	{
 		return $this->belongsTo(User::class);
 	}
+	public function votes() 
+	{
+		return $this->hasMany(Votes::class);
+	}
 	public static function sortPosts($pageSize)
 	{
 		return Post::orderBy('created_at', 'desc')->paginate($pageSize);
@@ -46,5 +49,15 @@ class Post extends Model
 	public static function searchPosts($search)
 	{
 		return Post::where('content', 'LIKE', '%' . $search . '%')->with('user')->paginate(10);
+	}
+	public function voteScore()
+	{
+		$upVotes = $this->votes()->where('vote', '=', 1)->count();
+		$downVotes = $this->votes()->where('vote', '=', 0)->count();
+		return $upVotes - $downVotes;
+	}
+	public function userVote(User $user)
+	{
+		$this->votes()->where('user_id', "=", $user->id)->first();
 	}
 }

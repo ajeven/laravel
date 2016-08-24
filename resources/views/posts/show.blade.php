@@ -10,10 +10,10 @@
 			</tr>
 		</thead>
 		<tbody>
-				<tr>
-					<td>{{ $post->title}}</td>
-					<td>{{ $post->url}}</td>
-					<td>{{ $post->content}}</td>
-				</tr>
+			<tr>
+				<td>{{ $post->title}}</td>
+				<td>{{ $post->url}}</td>
+				<td>{{ $post->content}}</td>
+			</tr>
 		</tbody>	
 	</table>@stop

@@ -29,6 +29,7 @@ Route::get('/add/{number1}/{number2}', function ($number1, $number2)
 });
 Route::get('/rolldice/{guess?}', 'HomeController@rollDice');
 
+// Route::resource('votes', 'VotesController');
 Route::get('/posts/search', 'PostsController@search');
 Route::resource('/posts', 'PostsController');
 Route::post('/posts/{posts}/restore', 'PostsController@restore');

@@ -144,6 +144,18 @@ class PostsController extends Controller
 		$request->session()->flash('message', 'We have made liftoff');
 		return redirect()->action('PostsController@index');
 	}
+	public function addVote(Request $request)
+	{
+		$vote = Vote::with('post')->firstOrCreate([
+			'post_id' => $request->input('post_id'),
+			'user_id' => $request->user()->id
+			]);
+		$vote->votes = $request->input('votes');
+		$vote->save();
+
+		$post = $vote->post;
+	
+	}
 	public function search(Post $post, Request $request)
 	{
 		$search = $request->input('search');
