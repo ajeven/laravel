@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -10,6 +12,12 @@ use App\Post;
 
 class PostsController extends Controller
 {
+
+    public function __construct()
+    {
+    	$this->middleware('auth', ['except' => ['index', 'show']]);
+    }
+
 	/**
 	 * Display a listing of the resource.
 	 *
@@ -17,8 +25,7 @@ class PostsController extends Controller
 	 */
 	public function index()
 	{
-
-		$posts = Post::paginate(4);
+		$posts = Post::sortPosts(10);
 		return view('posts.index', ['posts' => $posts]);
 	}
 
@@ -29,6 +36,7 @@ class PostsController extends Controller
 	 */
 	public function create()
 	{
+
 		return view('posts.create');
 	}
 
@@ -42,7 +50,7 @@ class PostsController extends Controller
 	{
 		
 		$post = new  Post();
-		$post->user_id = 1;
+		$post->user_id = Auth::user()->id;
 		return $this->validateAndSave($post, $request);
 	}
 
@@ -121,14 +129,29 @@ class PostsController extends Controller
 		$request->session()->flash('message', 'Posts have been restored');
 		return redirect()->action('PostsController@index');
 	}
+	// put this in profilecontroller later
+	// public function profile(Post $post)
+	// {
+	// 	return view('auth.account', ['post' => $post]);
+	// }
 	private function validateAndSave(Post $post, Request $request)
 	{
 		$this->validate($request, Post::$rules);
 		$post->title = $request->input('title');
 		$post->url= $request->input('url');
-		$post->content  = $request->input('content');
+		$post->content = $request->input('content');
 		$post->save();
 		$request->session()->flash('message', 'We have made liftoff');
 		return redirect()->action('PostsController@index');
 	}
+	public function search(Post $post, Request $request)
+	{
+		$search = $request->input('search');
+
+		if ($search) {
+			$results = Post::searchPosts($search);
+		}
+		return view('posts.results', ['search' => $results]);
+	}
+
 }

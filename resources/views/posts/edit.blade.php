@@ -20,7 +20,6 @@
 			<label for="content">Content:</label> 
 				<input 
 					class="form-control" 
-					name="content"
 					type="text"
 					name='content'
 					id="content" 

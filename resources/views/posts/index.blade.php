@@ -16,7 +16,7 @@
 					@foreach ($posts as $post)
 					<tr>
 						<td>{{ $post->title }}</td>
-						<td>{{ $post->url }}</td>
+						<td><a href="http://{{ $post->url }}" target="_Blank">{{ $post->url }}</a></td>
 						<td>{{ $post->content }}</td>
 						<td>{{ $post->created_at->setTimezone('America/Chicago')->format('l, F jS Y @ h:i:s A') }}</td>
 						<td>{{ $post->updated_at->setTimezone('America/Chicago')->format('l, F jS Y @ h:i:s A') }}</td>

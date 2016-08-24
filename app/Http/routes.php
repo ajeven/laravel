@@ -27,7 +27,14 @@ Route::get('/add/{number1}/{number2}', function ($number1, $number2)
 {
 	return $number1 + $number2;
 });
-
 Route::get('/rolldice/{guess?}', 'HomeController@rollDice');
-Route::post('/posts/{posts}/restore', 'PostsController@restore');
+
+Route::get('/posts/search', 'PostsController@search');
 Route::resource('/posts', 'PostsController');
+Route::post('/posts/{posts}/restore', 'PostsController@restore');
+Route::get('auth/account', 'PostsController@profile');
+Route::get('auth/login', 'Auth\AuthController@getLogin');
+Route::post('auth/login', 'Auth\AuthController@postLogin');
+Route::get('auth/logout', 'Auth\AuthController@getLogout');
+Route::get('auth/register', 'Auth\AuthController@getRegister');
+Route::post('auth/register', 'Auth\AuthController@postRegister');

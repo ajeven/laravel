@@ -16,6 +16,11 @@ class User extends Model implements AuthenticatableContract,
 {
     use Authenticatable, Authorizable, CanResetPassword;
 
+    public function posts()
+    {
+                                    //because I added user_id on posts table I do not need a second argument.
+        return $this->hasMany(Post::class);
+    }
     /**
      * The database table used by the model.
      *
