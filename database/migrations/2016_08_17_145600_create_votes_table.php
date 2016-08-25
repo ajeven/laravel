@@ -17,7 +17,7 @@ class CreateVotesTable extends Migration
             $table->increments('id');
             $table->integer('user_id')->references('id')->on('users');
             $table->integer('post_id')->references('id')->on('posts');
-            $table->integer('votes');
+            $table->boolean('vote')->default(true);
             $table->timestamps();
         });
 

@@ -4,31 +4,48 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Database\Eloquent\Model;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Post;
+use App\Votes;
 
 class PostsController extends Controller
 {
 
-    public function __construct()
-    {
-    	$this->middleware('auth', ['except' => ['index', 'show']]);
-    }
+	public function __construct()
+	{
+		$this->middleware('auth', ['except' => ['index', 'show']]);
+	}
 
 	/**
 	 * Display a listing of the resource.
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function index()
+	public function index(Request $request)
 	{
 		$posts = Post::sortPosts(10);
-		return view('posts.index', ['posts' => $posts]);
+		if ($request->user()) {
+            $user_vote = Post::userVote($request->user());
+        } else {
+            $user_vote = null;
+        }
+        $data = compact('posts', 'user_vote');
+		return view('posts.index')->with($data);
 	}
-
+	// public function show(Request $request, $id)
+ //    {
+ //        $post = Post::with('user')->findOrFail($id);
+ //        if ($request->user()) {
+ //            $user_vote = $post->userVote($request->user());
+ //        } else {
+ //            $user_vote = null;
+ //        }
+ //        $data = compact('post', 'user_vote');
+ //        return view('posts.show')->with($data);
+ //    }
 	/**
 	 * Show the form for creating a new resource.
 	 *
@@ -62,12 +79,7 @@ class PostsController extends Controller
 	 */
 	public function show($id)
 	{
-		$post = Post::find($id);
-		// dd($data);
-		if (!$post)
-		{
-			abort(404);
-		}
+		$post = Post::with('user')->findOrFail($id);
 
 		return view('posts.show', ['post' => $post]);
 	}
@@ -146,15 +158,22 @@ class PostsController extends Controller
 	}
 	public function addVote(Request $request)
 	{
-		$vote = Vote::with('post')->firstOrCreate([
-			'post_id' => $request->input('post_id'),
-			'user_id' => $request->user()->id
-			]);
-		$vote->votes = $request->input('votes');
+		Model::unguard();
+		$vote = Votes::firstOrCreate([
+			'user_id' => $request->user()->id,
+			'post_id' => $request->input('post_id')
+		]);
+		$vote->vote = $request->input('vote');
 		$vote->save();
-
+		Model::reguard();
 		$post = $vote->post;
-	
+		$post->vote_score = $post->voteScore();	
+		$post->save();
+		$data = [
+			'vote_score' => $post->vote_score,
+			'vote' => $vote->vote
+		];
+		return $data;
 	}
 	public function search(Post $post, Request $request)
 	{

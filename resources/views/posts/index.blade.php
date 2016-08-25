@@ -6,16 +6,16 @@
 					@foreach ($posts as $post)
 					<tr>
 						<td>
-							<div class="upvote topic" data-post="{{ $post->id }}">
-							 	<div class="upvote vote glyphicon glyphicon-plus-sign" data-post="{{ $post->id }}" data-vote="1"></div>
-							 		<span class="vote-score text-center">{{ $post->voteScore() }}</span>
-							 	<div class="downvote vote glyphicon glyphicon-minus-sign" data-post="{{ $post->id }}" data-vote="-1"></div>
-							 	<input type="hidden" id="vote" name="vote" value="">
-							 	<input type="hidden" id="post_id" name="post_id" value="">
+							<div class="row">
+								<i class="vote glyphicon glyphicon-plus-sign center-block {{ (!is_null($user_vote) && $user_vote->vote) ? 'active' : '' }}" data-vote="1" data-post-id="{{ $post->id }}"></i>
+									<span class="vote-score text-center" id="vote-score">{{ $post->vote_score}}</span>
+								<i class="vote glyphicon glyphicon-minus-sign center-block {{ (!is_null($user_vote) && !$user_vote->vote) ? 'active' : '' }}" data-vote="0" data-post-id="{{ $post->id }}"></i>
 							</div>
-							</form>
+							<input type="hidden" id="vote-url" value="{{ action('PostsController@addVote') }}">
+							<input type="hidden" id="csrf-token" value="{{ Session::token() }}">
+							<input type="hidden" id="is-logged-in" value="{{ Auth::check() }}">
 						</td>
-						<td>{{ $post->title}}</td>
+						<td><a href="{{ action('PostsController@show') }}">{{ $post->title}}</a></td>
 						<td><a href="http://{{ $post->url }}" target="_Blank">{{ $post->url }}</a></td>
 						<td>{{ $post->content }}</td>
 						<td>{{ $post->created_at->setTimezone('America/Chicago')->format('l, F jS Y @ h:i:s A') }}</td>
@@ -30,4 +30,7 @@
 			</tr>
 		</tfoot>	
 	</table>
+
 @stop
+
+<div class="row">

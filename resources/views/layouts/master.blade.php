@@ -8,10 +8,23 @@
 	.count {
 		margin-bottom: 0px;
 	}
-	.upvote {
+	.vote-score {
+		font-size: 30px;
+		margin-bottom: 0;
+	}
+	.vote {
+		opacity: .3
+	}
+	.vote.active {
+		opacity: 1;
+	}
+	.vote:hover {
+		opacity: 1;
+	}
+	.glyphicon-plus-sign {
 		color: green;
 	}
-	.downvote {
+	.glyphicon-minus-sign {
 		color: red;
 	}
 	/*404 style*/
@@ -168,9 +181,29 @@
 	});
 	function doAjax(url, method, data, callback) {
 		$.ajax(url, {
-			type: method
-		})
+			type: method,
+			data: data
+		}).done(callback);
 	}
+	$(document).ready(function() {
+		$('.vote').on('click', function() {
+				var data = {
+					_token: $('#csrf-token').val(),
+					vote: $(this).data('vote'),
+					post_id: $(this).data('postId')
+				};
+				var url = $('#vote-url').val();
+
+				var callback = function(data) {
+					console.log(data.vote_score);
+					$('#vote-score').text(data.vote_score);
+					$('.votes').removeClass('active');
+					$('[data-vote="' + data.vote + '"]').addClass('active');
+				}
+
+				doAjax(url, "POST", data, callback);
+		})
+	})
 </script>
 </body>
 </html>

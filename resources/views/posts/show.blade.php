@@ -1,14 +1,7 @@
 @extends('layouts.master')
 
 @section('content')
-		<table class="table table-striped table-bordered">
-		<thead>
-			<tr>
-				<th>Title</th>
-				<th>URL</th>
-				<th>Content</th>
-			</tr>
-		</thead>
+		<table class="table">
 		<tbody>
 			<tr>
 				<td>{{ $post->title}}</td>

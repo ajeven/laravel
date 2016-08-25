@@ -44,20 +44,28 @@ class Post extends Model
 	}
 	public static function sortPosts($pageSize)
 	{
-		return Post::orderBy('created_at', 'desc')->paginate($pageSize);
+		return Post::with('user')->orderBy('created_at', 'desc')->paginate($pageSize);
 	}
 	public static function searchPosts($search)
 	{
 		return Post::where('content', 'LIKE', '%' . $search . '%')->with('user')->paginate(10);
 	}
+	public function downvotes()
+	{
+		return $this->votes()->where('vote', '=', 0);
+	}
+	public function upvotes()
+	{
+		return $this->votes()->where('vote', '=', 1);
+	}
 	public function voteScore()
 	{
-		$upVotes = $this->votes()->where('vote', '=', 1)->count();
-		$downVotes = $this->votes()->where('vote', '=', 0)->count();
+		$upVotes = $this->upvotes()->count();
+		$downVotes = $this->downvotes()->count();
 		return $upVotes - $downVotes;
 	}
-	public function userVote(User $user)
+	public static function userVote(User $user)
 	{
-		$this->votes()->where('user_id', "=", $user->id)->first();
+		return Votes::where('user_id', '=', $user->id)->first();
 	}
 }
