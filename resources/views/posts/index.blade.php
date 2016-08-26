@@ -15,12 +15,12 @@
 							<input type="hidden" id="csrf-token" value="{{ Session::token() }}">
 							<input type="hidden" id="is-logged-in" value="{{ Auth::check() }}">
 						</td>
-						<td><a href="{{ action('PostsController@show') }}">{{ $post->title}}</a></td>
-						<td><a href="http://{{ $post->url }}" target="_Blank">{{ $post->url }}</a></td>
-						<td>{{ $post->content }}</td>
-						<td>{{ $post->created_at->setTimezone('America/Chicago')->format('l, F jS Y @ h:i:s A') }}</td>
-						<td>{{ $post->updated_at->setTimezone('America/Chicago')->format('l, F jS Y @ h:i:s A') }}</td>
-						<td>{{ $post->user->name }}</td>
+						<td class="text-center"><a href="{{ action('PostsController@show') }}">{{ $post->title}}</a></td>
+						<td class="text-center"><a href="http://{{ $post->url }}" target="_Blank">{{ $post->url }}</a></td>
+						<td class="text-center">{{ $post->content }}</td>
+						<td class="text-center">{{ $post->created_at->setTimezone('America/Chicago')->format('l, F jS Y @ h:i:s A') }}</td>
+						<td class="text-center">{{ $post->updated_at->setTimezone('America/Chicago')->format('l, F jS Y @ h:i:s A') }}</td>
+						<td class="text-center">{{ $post->user->name }}</td>
 					</tr>
 					@endforeach
 			</tbody>

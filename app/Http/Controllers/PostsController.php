@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Post;
+use App\User;
 use App\Votes;
 
 class PostsController extends Controller
@@ -35,17 +36,6 @@ class PostsController extends Controller
         $data = compact('posts', 'user_vote');
 		return view('posts.index')->with($data);
 	}
-	// public function show(Request $request, $id)
- //    {
- //        $post = Post::with('user')->findOrFail($id);
- //        if ($request->user()) {
- //            $user_vote = $post->userVote($request->user());
- //        } else {
- //            $user_vote = null;
- //        }
- //        $data = compact('post', 'user_vote');
- //        return view('posts.show')->with($data);
- //    }
 	/**
 	 * Show the form for creating a new resource.
 	 *
@@ -77,13 +67,11 @@ class PostsController extends Controller
 	 * @param  int  $id
 	 * @return \Illuminate\Http\Response
 	 */
-	public function show($id)
+	public function show(Request $request, $id)
 	{
-		$post = Post::with('user')->findOrFail($id);
-
-		return view('posts.show', ['post' => $post]);
+		$user = User::with('posts')->findOrFail($id);
+        return view('posts.show')->with('user', $user);
 	}
-
 	/**
 	 * Show the form for editing the specified resource.
 	 *
@@ -166,6 +154,7 @@ class PostsController extends Controller
 		$vote->vote = $request->input('vote');
 		$vote->save();
 		Model::reguard();
+
 		$post = $vote->post;
 		$post->vote_score = $post->voteScore();	
 		$post->save();

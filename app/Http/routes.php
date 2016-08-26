@@ -33,6 +33,7 @@ Route::get('/posts/search', 'PostsController@search');
 Route::post('/posts/add-vote', 'PostsController@addVote');
 Route::resource('/posts', 'PostsController');
 Route::post('/posts/{posts}/restore', 'PostsController@restore');
+
 Route::get('auth/account', 'PostsController@profile');
 Route::get('auth/login', 'Auth\AuthController@getLogin');
 Route::post('auth/login', 'Auth\AuthController@postLogin');

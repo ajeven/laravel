@@ -138,7 +138,7 @@
 			@if(Auth::check())
 				<li><a href="{{ action('Auth\AuthController@getLogout') }}">Logout</a></li>
 				<li><a href="{{ action('PostsController@create') }}">Post</a></li>
-				<!-- <li><a href="{{ action('PostsController@profile') }}">Profile</a></li> -->
+				<li><a href="{{ action('PostsController@show') }}">Profile</a></li>
 			@else
 				<li><a href="{{ action('Auth\AuthController@getLogin')}}">Login</a></li>
 				<li><a href="{{ action('Auth\AuthController@postRegister')}}">Register</a></li>
